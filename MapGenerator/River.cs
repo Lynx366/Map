@@ -17,6 +17,7 @@ namespace Generator
             newRiver.Add(first);
             _map.rivers[first.x, first.y] = 1;
             bool flag = true;
+            bool wasTributary = false;
             do
             {
                 int jump = 5;
@@ -33,9 +34,45 @@ namespace Generator
                 if (_map.digitalized[newRiver.Last().x, newRiver.Last().y] == 0)
                     flag = false;
 
+
+
             } while (flag == true);
+            if(wasTributary==false)
             _map.AllRivers.Add(newRiver);
             return _map;
+        }
+        private static Map checkRiverConnections(Map _map,int jump, List<RiverPoint> newRiver)
+        {
+            int riverNumber = 0;
+            int riverPointIndex = 0;
+            bool flag = false;
+            foreach(List<RiverPoint> river in _map.AllRivers)
+            {
+                riverPointIndex = 0;
+                foreach(RiverPoint point in river)
+                {
+                    if(Math.Abs(point.x-newRiver.Last().x)<jump && Math.Abs(point.y-newRiver.Last().y)<jump)
+                    {
+                        RiverPoint temp = new RiverPoint();
+                        temp = point;
+                        temp.isTributary = true;
+                        newRiver.Add(temp);
+                        flag = true;
+                        break;
+                    }
+                    riverPointIndex++;
+                }
+                riverNumber++;
+            }
+            if(flag == true)
+            {
+                for (int i = riverPointIndex; i < _map.AllRivers[riverNumber].Count; i++)
+                    _map.AllRivers[riverNumber][i].stream += newRiver.Last().stream;
+
+                _map.AllRivers.Add(newRiver);
+                return _map;
+            }
+            return null;
         }
         public static Map AlternativeCreateRiver(Map _map)
         {
@@ -47,6 +84,7 @@ namespace Generator
         {
             RiverPoint result = new RiverPoint();
             result.stream = previous.Last().stream;
+            result.isTributary = false;
             int x = previous.Last().x;
             int y = previous.Last().y;
             int newx = x;
@@ -91,6 +129,7 @@ namespace Generator
             var result = new RiverPoint();
             result.x = X;
             result.y = Y;
+            result.isTributary = false;
             return result;
         }
         public static List<RiverPoint> step(Map _map, List<RiverPoint> RiverCollection)

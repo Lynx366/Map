@@ -155,10 +155,10 @@ namespace MapViewer
             foreach (List<RiverPoint> singleRiver in Collection.AllRivers)
                 foreach (RiverPoint point in singleRiver)
                 {
-                    for (int i = point.x - 1; i < point.x + 1; i++)
-                        for (int k = point.y - 1; k < point.y +1; k++ )
+                    for (int i = point.x; i <= point.x; i++)
+                        for (int k = point.y; k <= point.y; k++)
                             if (i >= 0 && i < Collection.size && k >= 0 && k < Collection.size)
-                            bmp.SetPixel(i, k, System.Drawing.Color.Violet);
+                                bmp.SetPixel(i, k, System.Drawing.Color.Violet);
                 }
             BitmapSource bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                               bmp.GetHbitmap(),

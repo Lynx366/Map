@@ -49,6 +49,7 @@ namespace Generator
         public int x;
         public int y;
         public double stream;
+        public bool isTributary;
     }
     public class Map
     {
